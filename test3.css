@@ -293,3 +293,49 @@ header .logo {
     color: black;
     margin: 0px;
 }
+.feedback{
+    background: #f4f4f4;
+    width: 400px;
+    height: 200px;
+    margin-left: 370px;
+    box-shadow: 4px 4px 0px 3px #2c3e50;
+    border-radius: 5px;
+
+    position:relative;
+}
+
+.emoji{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+
+    position: absolute;
+    left: 50%;
+    top: 20%;
+
+    transform: translate(-50%);
+
+    display: flex;
+    overflow: hidden;
+}
+
+.emoji i{ 
+    transform: translateX(0);
+    transition: .2s ;
+}
+
+.rating{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20%;
+    cursor: pointer;
+}
+
+.rating i{
+    color: #030011;
+}
+
+.rating i.active{
+    color: #3820a3;
+}
