@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <style>
+        :root {
+            --background-color: #f8f9fa; /* Light gray */
+            --primary-color: #007bff; /* Bootstrap primary blue */
+            --bot-message-bg: #e2f0ff; /* Light blue for bot messages */
+        }
+    </style>
+</head>
+
+<body class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+
+    <!-- Chat Container-->
+    <div class="card shadow-lg rounded-lg w-100 p-4 d-flex flex-column overflow-hidden" style="max-width: 600px; background-color: var(--background-color);">
+        <!-- Card Header-->
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top mb-3" style="background-color: var(--primary-color) !important;">
+            <h5 class="mb-0" style="font-family: 'Edu NSW ACT Hand Pre', cursive; font-weight: 700;">Slime Chatbot</h5>
+        </div>
+
+        <!-- Chat Messages Area-->
+        <div class="card-body chat-messages overflow-auto p-3 d-flex flex-column flex-grow-1" id="chat-messages" style="max-height: 60vh;">
+            <!-- Initial bot message -->
+            <div class="p-3 mb-2 rounded-lg text-dark bg-white shadow-sm mr-auto" style="max-width: 80%; background-color: var(--bot-message-bg) !important;">Hello! Welcome to Tutors Tuition.My name is Slime. I'm here to help you learn more about our tutoring services. How can I assist you today?</div>
+        </div>
+
+        <!-- Chat Input Area-->
+        <div class="input-group p-3 border-top">
+            <input type="text" id="user-input" class="form-control rounded-pill mr-2 p-3" placeholder="Type your message..." autocomplete="off">
+            <div class="input-group-append">
+                <!-- Send Button with Font Awesome Icon -->
+                <button id="send-button" class="btn btn-primary rounded-pill d-flex align-items-center justify-content-center" style="background-color: lightblue; border: none;">
+                    <i class="fa-solid fa-paper-plane fa-lg text-dark"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
+
+    <script type="module">
+
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        let chatHistory = [
+            {
+                role: "user",
+                parts: [{ text: "Your name is Slime and You are a chatbot for Tutors Tuition website. You should assist users with:\n- Information about our tutoring services and subjects covered\n- Details about our expert tutors and their qualifications\n- Booking process and scheduling sessions\n- General inquiries about our teaching methodology\n- Questions about subjects we offer (Math, Sciences, English, Languages, etc.)\n- Information about our offline home tutoring services\nOnly answer questions related to Tutors Tuition website and services." }]
+            },
+            {
+                role: "model",
+                parts: [{ text: "Hello! Welcome to Tutors Tuition.My name is Slime. I'm here to help you learn more about our tutoring services. How can I assist you today?" }]
+            }
+        ];
+
+        
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('p-3', 'mb-2', 'rounded-lg', 'text-dark', 'shadow-sm');
+
+            if (sender === 'user') {
+                messageDiv.classList.add('bg-white', 'ml-auto');
+            } else {
+                messageDiv.classList.add('mr-auto');
+                messageDiv.style.backgroundColor = 'var(--bot-message-bg)'; // Use CSS variable for bot message background
+            }
+            messageDiv.style.maxWidth = '80%';
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showLoadingIndicator(show) {
+            let loadingDiv = document.getElementById('loading-spinner');
+            if (show) {
+                if (!loadingDiv) {
+                    loadingDiv = document.createElement('div');
+                    loadingDiv.id = 'loading-spinner';
+                    loadingDiv.classList.add('font-italic', 'text-muted', 'mt-2', 'mr-auto');
+                    loadingDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Thinking...';
+                    chatMessages.appendChild(loadingDiv);
+                }
+            } else {
+                if (loadingDiv) {
+                    loadingDiv.remove();
+                }
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+
+        async function sendMessage() {
+            const prompt = userInput.value.trim();
+            if (prompt === '') {
+                return;
+            }
+
+            
+            appendMessage(prompt, 'user');
+            userInput.value = '';
+            showLoadingIndicator(true);
+
+            
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            try {
+                
+                const payload = {
+                    contents: chatHistory
+                };
+
+                // Make request to your proxy server
+                const response = await fetch('http://localhost:3000/generateContent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    // Handle HTTP errors
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    appendMessage(`Error: ${errorData.error?.message || 'Something went wrong with the API request.'}`, 'bot');
+                    
+                    chatHistory.pop();
+                    return;
+                }
+
+                const result = await response.json();
+                console.log(result);
+
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const botResponseText = result.candidates[0].content.parts[0].text;
+                    appendMessage(botResponseText, 'bot');
+                    
+                    chatHistory.push({ role: "model", parts: [{ text: botResponseText }] });
+                } else {
+                    appendMessage("Sorry, I couldn't generate a response. Please try again.", 'bot');
+                    
+                    chatHistory.pop();
+                }
+
+            } catch (error) {
+                console.error('Network or parsing error:', error);
+                appendMessage("An error occurred. Please check your network connection and try again.", 'bot');
+                
+                chatHistory.pop();
+            } finally {
+                showLoadingIndicator(false);
+            }
+        }
+
+        
+        sendButton.addEventListener('click', sendMessage);
+
+        
+        userInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+
+</html>
