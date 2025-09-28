@@ -45,10 +45,12 @@ A comprehensive web-based tutoring platform that connects students with expert t
    ```
 
 3. **Set up environment variables**
-   Create a `.env` file in the root directory and add your API key:
+   For local development, create a `.env` file in the root directory:
    ```env
    GEMINI_API_KEY=your_gemini_api_key_here
    ```
+   
+   **Note**: For Render deployment, add environment variables in the Render dashboard instead of using a `.env` file.
 
 4. **Start the server**
    ```bash
@@ -102,12 +104,28 @@ Proxy endpoint for Google Gemini API integration
 - **Authentication**: Requires GEMINI_API_KEY environment variable
 - **Content-Type**: application/json
 
-## 🚀 Deployment
+## 🚀 Deployment on Render
 
-1. **Environment Setup**: Ensure all environment variables are configured
-2. **Production Build**: The application serves static files directly
-3. **Server Configuration**: Configure your hosting platform to run `npm start`
-4. **Domain Setup**: Point your domain to the deployed server
+This project is configured for deployment on [Render.com](https://render.com), a modern cloud platform.
+
+### Render Deployment Steps
+
+1. **Connect Repository**: Link your GitHub repository to Render
+2. **Create Web Service**: 
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Environment: `Node`
+3. **Configure Environment Variables**:
+   - Add `GEMINI_API_KEY` in Render dashboard
+4. **Deploy**: Render will automatically deploy on every push to main branch
+
+### Environment Configuration
+- **Port**: Render automatically provides `PORT` environment variable
+- **Node Version**: Specified in `package.json` engines field
+- **Auto-Deploy**: Enabled for continuous deployment
+
+### Live Demo
+🌐 **Live Site**: [Your Render URL will appear here after deployment]
 
 ## 🔐 Environment Variables
 
@@ -151,6 +169,32 @@ Proxy endpoint for Google Gemini API integration
 ## 🐛 Bug Reports & Feature Requests
 
 For bug reports and feature requests, please visit our [Issues Page](https://github.com/muqeeth542/Tutors-Tution/issues).
+
+## 🗂️ Files to Remove for Render Deployment
+
+When deploying to Render, you should remove or exclude these files:
+
+### ❌ Files to Remove:
+- `.env` - Contains sensitive API keys (use Render's environment variables instead)
+- `node_modules/` - Will be automatically installed by Render during build
+- Any local development files or test files
+- IDE-specific files (`.vscode/`, `.idea/`, etc.)
+
+### ✅ Files to Keep:
+- All `.html`, `.css`, `.js` files
+- `images/` directory and all assets
+- `package.json` and `package-lock.json`
+- `server.js` (main application file)
+- `README.md`
+
+### 📋 Pre-Deployment Checklist:
+1. ✅ Remove `.env` file from repository
+2. ✅ Add `.env` to `.gitignore`
+3. ✅ Configure `GEMINI_API_KEY` in Render dashboard
+4. ✅ Update `package.json` with proper start script
+5. ✅ Test locally before deployment
+
+**⚠️ Important**: Never commit `.env` files to your repository. Use `.gitignore` to exclude them.
 
 ---
 
