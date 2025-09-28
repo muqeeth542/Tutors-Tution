@@ -263,5 +263,25 @@
         window.addEventListener('scroll', animateOnScroll);
         window.addEventListener('load', animateOnScroll);
     </script>
+
+    <div class="chat-widget">
+        <div class="chat-toggle">
+            <i class="fa-solid fa-comments fa-lg"></i>
+        </div>
+        <iframe src="./cht_bt.html" class="chat-frame" title="Chat with us"></iframe>
+    </div>
+
+    <script>
+        // Add Font Awesome for chat icon
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css';
+        document.head.appendChild(link);
+
+        // Chat widget toggle functionality
+        document.querySelector('.chat-toggle').addEventListener('click', function() {
+            document.querySelector('.chat-widget').classList.toggle('expanded');
+        });
+    </script>
 </body>
 </html>
